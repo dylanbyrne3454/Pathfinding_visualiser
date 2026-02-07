@@ -3,10 +3,16 @@ from utils import h, reconstruct_path
 import pygame
 import time
 
-def a_star(draw, grid, start, end):
+def a_star(draw, grid, start, end, stats=None):
+	start_time = time.time()
+
+	if stats:
+		stats.reset()
+		stats.algorithm_name = "A*"  # ✅ Fixed
+
 	count = 0
 	open_set = PriorityQueue()
-	open_set.put((0,count, start))
+	open_set.put((0, count, start))
 	came_from = {}
 	g_score = {spot: float('inf') for row in grid for spot in row}
 	g_score[start] = 0
@@ -23,7 +29,19 @@ def a_star(draw, grid, start, end):
 		current = open_set.get()[2]
 		open_set_hash.remove(current)
 
+		if stats:
+			stats.nodes_explored += 1  # ✅ Fixed (added 's')
+
 		if current == end:
+			if stats:
+				path_len = 0 
+				temp = end  
+				while temp in came_from:
+					path_len += 1
+					temp = came_from[temp]
+				stats.path_length = path_len  # ✅ Fixed
+				stats.time_taken = time.time() - start_time  # ✅ Fixed
+
 			reconstruct_path(came_from, end, draw) 
 			end.make_end()
 			return True  
@@ -46,42 +64,18 @@ def a_star(draw, grid, start, end):
 		if current != start:
 			current.make_closed()
 
-	return False
-
-def bfs(draw, grid, start, end):
-	queue = [start]
-	came_from = {}
-	visited = {start}
-
-
-
-	while queue:
-		for event in pygame.event.get():
-			if event.type == pygame.QUIT:
-				pygame.quit()
-
-		current = queue.pop(0)
-		
-		if current == end:
-			reconstruct_path(came_from, end, draw) 
-			end.make_end()
-			return True  
-
-		for neighbor in current.neighbors:
-			if neighbor not in visited:
-				visited.add(neighbor)
-				came_from[neighbor] = current
-				queue.append(neighbor)
-				neighbor.make_open()
-
-		draw()
-
-		if current != start:
-			current.make_closed()
+	if stats:
+		stats.time_taken = time.time() - start_time
 
 	return False
+	
+def dijkstra(draw, grid, start, end, stats=None):
+	start_time = time.time()
+	
+	if stats:
+		stats.reset()
+		stats.algorithm_name = "Dijkstra"
 
-def dijkstra(draw, grid, start, end):
 	count = 0
 	open_set = PriorityQueue()
 	open_set.put((0,count, start))
@@ -101,7 +95,19 @@ def dijkstra(draw, grid, start, end):
 		current = open_set.get()[2]
 		open_set_hash.remove(current)
 
+		if stats:
+			stats.nodes_explored += 1
+
 		if current == end:
+			if stats:
+				path_len = 0
+				temp = end
+				while temp in came_from:
+					path_len += 1
+					temp = came_from[temp]
+				stats.path_length = path_len
+				stats.time_taken = time.time() - start_time
+			
 			reconstruct_path(came_from, end, draw) 
 			end.make_end()
 			return True  
@@ -124,9 +130,18 @@ def dijkstra(draw, grid, start, end):
 		if current != start:
 			current.make_closed()
 
+	if stats:
+		stats.time_taken = time.time() - start_time
+
 	return False
 
-def greedy_best_first(draw, grid, start, end):
+def greedy_best_first(draw, grid, start, end, stats=None):
+	start_time = time.time()
+	
+	if stats:
+		stats.reset()
+		stats.algorithm_name = "Greedy"
+
 	count = 0
 	open_set = PriorityQueue()
 	open_set.put((0, count, start))
@@ -146,7 +161,19 @@ def greedy_best_first(draw, grid, start, end):
 			continue
 		visited.add(current)
 
+		if stats:
+			stats.nodes_explored += 1
+
 		if current == end:
+			if stats:
+				path_len = 0
+				temp = end
+				while temp in came_from:
+					path_len += 1
+					temp = came_from[temp]
+				stats.path_length = path_len
+				stats.time_taken = time.time() - start_time
+			
 			reconstruct_path(came_from, end, draw) 
 			end.make_end()
 			return True  
@@ -163,5 +190,7 @@ def greedy_best_first(draw, grid, start, end):
 		draw()
 		if current != start:
 			current.make_closed()
-	
+	if stats:
+		stats.time_taken = time.time() - start_time
+
 	return False

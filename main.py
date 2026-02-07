@@ -3,12 +3,12 @@ import math
 from constants import *
 from utils import *
 from algorythms import *
-
+from spot import Statistics
 
 WIN = pygame.display.set_mode((WIDTH,WIDTH))
 pygame.display.set_caption('Algorythm visualiser')
 
-def draw(win, grid, rows, width):
+def draw(win, grid, rows, width, stats=None):
 	win.fill(WHITE)
 
 	for row in grid:
@@ -16,11 +16,13 @@ def draw(win, grid, rows, width):
 			spot.draw(win)
 
 	draw_grid(win, rows, width)
+	draw_stats(win, stats)
 	pygame.display.update()
 
 
 def main(win, width):
 	grid = make_grid(ROWS, width)
+	stats = Statistics()
 
 	start = None
 	end = None
@@ -29,7 +31,8 @@ def main(win, width):
 	started = False 
 
 	while run:
-		draw(win, grid, ROWS, width)
+		draw(win, grid, ROWS, width, stats)
+
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				run = False
@@ -67,17 +70,19 @@ def main(win, width):
 					start = None
 					end = None
 					grid = make_grid(ROWS, width)
+					stats.reset()
 
 				elif start and end:
 
+					draw_func = lambda: draw(win, grid, ROWS, width, stats)
 					if event.key == pygame.K_a:
-						run_algorythm(a_star, lambda: draw(win, grid, ROWS, width), grid, start, end)
+						run_algorythm(a_star, draw_func, grid, start, end, stats)
 					elif event.key == pygame.K_b:
-						run_algorythm(bfs, lambda: draw(win, grid, ROWS, width), grid, start, end)
+						run_algorythm(bfs, draw_func, grid, start, end, stats)
 					elif event.key == pygame.K_d:
-						run_algorythm(dijkstra, lambda: draw(win, grid, ROWS, width), grid, start, end)
+						run_algorythm(dijkstra, draw_func, grid, start, end, stats)
 					elif event.key == pygame.K_g:
-						run_algorythm(greedy_best_first, lambda: draw(win, grid, ROWS, width), grid, start, end)
+						run_algorythm(greedy_best_first, draw_func, grid, start, end, stats)
 		
 
 	pygame.quit()

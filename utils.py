@@ -38,7 +38,29 @@ def draw_grid(win, rows, width):
 	for j in range(rows):
 		pygame.draw.line(win, GREY, (j*gap, 0), (j*gap, width))
 
+def draw_stats(win, stats):
+	if not stats or stats.algorithm_name == "":
+		return
 
+	pygame.font.init()
+	font = pygame.font.SysFont('Arial', 20)
+
+	#Statistics shown
+	texts = [
+		f"Algorithm: {stats.algorithm_name}",
+		f"Nodes Explored: {stats.nodes_explored}",
+		f"Path Length: {stats.path_length}",
+		f"Time: {stats.time_taken * 1000:.2f} ms"
+	]
+	
+	box_height = 30* len(texts) + 20
+	pygame.draw.rect(win, (50, 50, 50), (10, 10, 300, box_height))
+
+	y_offset = 20
+	for text in texts:
+		text_surface = font.render(text, True, (255, 255, 255))
+		win.blit(text_surface, (20, y_offset))
+		y_offset += 30
 
 def get_clicked_pos(pos, rows, width):
 	gap = width // rows 
@@ -49,8 +71,8 @@ def get_clicked_pos(pos, rows, width):
 
 	return row, col 
 
-def run_algorythm(algorythm, draw_func, grid, start, end):
+def run_algorythm(algorythm, draw_func, grid, start, end, stats=None):
 	for row in grid:
 		for spot in row:
 			spot.update_neighbors(grid)
-	algorythm(draw_func, grid, start, end)
+	algorythm(draw_func, grid, start, end, stats)

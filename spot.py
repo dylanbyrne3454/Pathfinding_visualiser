@@ -72,3 +72,16 @@ class Spot:
 
 	def __lt__(self, other):
 		return False
+
+class Statistics:
+	def __init__(self):
+		self.nodes_explored = 0 
+		self.path_length = 0
+		self.algorithm_name = ""
+		self.time_taken = 0 
+
+	def reset(self):
+		self.nodes_explored = 0 
+		self.path_length = 0
+		self.algorithm_name = ""
+		self.time_taken = 0 
