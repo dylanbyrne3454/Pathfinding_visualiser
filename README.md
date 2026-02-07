@@ -1,6 +1,6 @@
 # Pathfinding Algorithm Visualizer
 
-A visual comparison tool for pathfinding algorithms, built with Python and Pygame. This project has the ability to utilise and visualise 4 unique algorythms aswell as providing statics on the opporations of each.
+A visual comparison tool for pathfinding algorithms, built with Python and Pygame. This project visualizes 4 unique pathfinding algorithms and provides statistics on the performance of each.
 
 ![Screenshot](screenshot.png)
 *Example: Dijkstra's algorithm finding the shortest path*
@@ -22,14 +22,14 @@ A visual comparison tool for pathfinding algorithms, built with Python and Pygam
 ## Installation
 
 ### Requirements
-- Python 3.0+
+- Python 3.7+
 - Pygame
 
 ### Setup
 ```bash
 # Clone the repository
-git https://github.com/dylanbyrne3454/Pathfinding_visualiser.git
-cd pathfinding-visualizer
+git clone https://github.com/dylanbyrne3454/Pathfinding_visualiser.git
+cd Pathfinding_visualiser
 
 # Install dependencies
 pip install pygame
@@ -62,4 +62,3 @@ Potential additions:
 - [ ] Weighted grids (different terrain costs)
 - [ ] Maze generation algorithms
 - [ ] Export path and statistics to CSV
-
