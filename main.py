@@ -17,6 +17,7 @@ def draw(win, grid, rows, width, stats=None):
 
 	draw_grid(win, rows, width)
 	draw_stats(win, stats)
+	draw_controls(win, width)
 	pygame.display.update()
 
 

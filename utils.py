@@ -62,6 +62,30 @@ def draw_stats(win, stats):
 		win.blit(text_surface, (20, y_offset))
 		y_offset += 30
 
+def draw_controls(win, width):
+
+	pygame.font.init()
+	font = pygame.font.SysFont('Arial', 16)
+	
+	
+	controls = [
+		"A: A* | B: BFS | D: Dijkstra | G: Greedy",
+		"Left Click: Draw | Right Click: Erase | C: Clear"
+	]
+	
+	box_height = 25 * len(controls) + 15
+	box_y = width - box_height - 10
+	
+	
+	pygame.draw.rect(win, (50, 50, 50), (10, box_y, width - 20, box_height))
+	
+	
+	y_offset = box_y + 10
+	for text in controls:
+		text_surface = font.render(text, True, (255, 255, 255))
+		win.blit(text_surface, (20, y_offset))
+		y_offset += 25
+		
 def get_clicked_pos(pos, rows, width):
 	gap = width // rows 
 	y, x = pos
